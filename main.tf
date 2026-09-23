@@ -113,7 +113,7 @@ resource "azurerm_dev_test_global_vm_shutdown_schedule" "auto_shutdown" {
   location            = azurerm_resource_group.rg.location
   enabled             = true
   daily_recurrence_time = "2200"
-  timezone_id            = "W. Europe Standard Time"
+  timezone            = "W. Europe Standard Time"
 
   notification_settings {
     enabled = false
