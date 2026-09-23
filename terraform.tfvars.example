@@ -1,0 +1,7 @@
+admin_password = "SchimbaPar0la!Puternica"
+my_ip          = "0.0.0.0/32"   # inlocuieste cu IP-ul tau public (afla-l de pe whatismyip.com)
+
+# optional, au deja valori default in variables.tf
+# location = "westeurope"
+# prefix   = "catalab"
+# vm_size  = "Standard_B2s"
