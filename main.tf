@@ -1,5 +1,9 @@
 terraform {
   required_version = ">= 1.5.0"
+  # Starea e ținută într-un Storage Account din Azure (config parțial:
+  # valorile vin din -backend-config, vezi README).
+  backend "azurerm" {}
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -77,7 +81,7 @@ resource "azurerm_network_interface" "nic" {
 }
 
 resource "azurerm_network_interface_security_group_association" "nic_nsg" {
-  network_interface_id     = azurerm_network_interface.nic.id
+  network_interface_id      = azurerm_network_interface.nic.id
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
 
@@ -109,11 +113,11 @@ resource "azurerm_windows_virtual_machine" "vm" {
 
 # Oprire automată zilnică, ca să nu consumi creditul degeaba
 resource "azurerm_dev_test_global_vm_shutdown_schedule" "auto_shutdown" {
-  virtual_machine_id = azurerm_windows_virtual_machine.vm.id
-  location            = azurerm_resource_group.rg.location
-  enabled             = true
+  virtual_machine_id    = azurerm_windows_virtual_machine.vm.id
+  location              = azurerm_resource_group.rg.location
+  enabled               = true
   daily_recurrence_time = "2200"
-  timezone            = "W. Europe Standard Time"
+  timezone              = "W. Europe Standard Time"
 
   notification_settings {
     enabled = false
@@ -124,10 +128,11 @@ resource "azurerm_dev_test_global_vm_shutdown_schedule" "auto_shutdown" {
 
 resource "azurerm_storage_account" "storage" {
   name                     = "${var.prefix}stg${random_string.suffix.result}"
-  resource_group_name     = azurerm_resource_group.rg.name
-  location                = azurerm_resource_group.rg.location
-  account_tier            = "Standard"
+  resource_group_name      = azurerm_resource_group.rg.name
+  location                 = azurerm_resource_group.rg.location
+  account_tier             = "Standard"
   account_replication_type = "LRS"
+  min_tls_version          = "TLS1_2"
 }
 
 resource "random_string" "suffix" {
