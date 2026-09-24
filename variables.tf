@@ -8,6 +8,13 @@ variable "prefix" {
   description = "Prefix folosit pentru numele resurselor"
   type        = string
   default     = "catalab"
+
+  # Folosit în numele Storage Account (doar a-z0-9, max 24) și în numele
+  # VM-ului Windows (max 15 caractere pentru computer name).
+  validation {
+    condition     = can(regex("^[a-z0-9]{1,12}$", var.prefix))
+    error_message = "prefix trebuie să aibă 1-12 caractere, doar litere mici și cifre."
+  }
 }
 
 variable "vm_size" {
@@ -26,6 +33,11 @@ variable "admin_password" {
   description = "Parola administrator Windows (min 12 caractere, complexă)"
   type        = string
   sensitive   = true
+
+  validation {
+    condition     = length(var.admin_password) >= 12
+    error_message = "admin_password trebuie să aibă minim 12 caractere."
+  }
 }
 
 variable "my_ip" {
